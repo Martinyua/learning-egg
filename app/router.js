@@ -1,7 +1,7 @@
 /*
  * @Author: Martin
  * @Date: 2020-11-17 19:25:12
- * @LastEditTime: 2020-11-17 20:13:52
+ * @LastEditTime: 2020-11-18 21:07:49
  * @FilePath: \egg-app\app\router.js
  */
 'use strict';
@@ -16,5 +16,9 @@ module.exports = app => {
 
   router.get('/user/index',controller.user.index)
   router.get('/user/read/:id',controller.user.read)
+
+
   router.post('/user/create',controller.user.create)
+  router.post('/user/update/:id',controller.user.update)
+  router.post('/user/delete/:id',controller.user.destroy)
 };
