@@ -1,7 +1,7 @@
 <!--
  * @Author: Martin
  * @Date: 2020-11-17 19:25:12
- * @LastEditTime: 2020-11-17 21:33:08
+ * @LastEditTime: 2020-11-19 20:33:43
  * @FilePath: \egg-app\README.md
 -->
 # learning-egg
@@ -38,4 +38,4 @@ $ npm stop
 
 [egg]: https://eggjs.org
 
-[Note](./Note.md)
+### [egg-note](./Note.md)
