@@ -1,7 +1,7 @@
 /*
  * @Author: Martin
  * @Date: 2020-11-17 19:25:12
- * @LastEditTime: 2020-11-17 20:59:36
+ * @LastEditTime: 2020-11-19 16:45:06
  * @FilePath: \egg-app\config\config.default.js
  */
 /* eslint valid-jsdoc: "off" */
@@ -22,7 +22,13 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1605612287270_9205';
 
   // add your middleware config here
-  config.middleware = [];
+  config.middleware = ['errorHandler'];
+  config.errorHandler = {
+    //通用配置
+    enable: true, //是否开启中间件  
+    //match: '/news',//设置只有符合某些规则的请求才会经过这个中间件
+    //ignore: '/shop',//设置符合某些规则的请求不会经过这个中间件
+  }
 
   // add your user config here
   const userConfig = {
@@ -50,13 +56,19 @@ module.exports = appInfo => {
     timezone: '+08:00',
     define: {
       freezeTableName: true,
-      timestamps:true,
-      createdAt:'created_at',
-      updatedAt:'updated_at',
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
       //所有驼峰命名格式化
-      underscored:true
+      underscored: true
     }
   }
+
+  config.valparams = {
+    locale: 'zh-cn',
+    throwError: true
+  };
+
   return {
     ...config,
     ...userConfig,

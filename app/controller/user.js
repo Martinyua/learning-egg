@@ -1,7 +1,7 @@
 /*
  * @Author: Martin
  * @Date: 2020-11-17 19:29:54
- * @LastEditTime: 2020-11-18 21:19:54
+ * @LastEditTime: 2020-11-19 16:47:11
  * @FilePath: \egg-app\app\controller\user.js
  */
 'use strict';
@@ -15,6 +15,7 @@ class UserController extends Controller {
         //         id: 2,
         //     }
         // })
+        // this.ctx.throw(504,'错误测试')
         let Op = this.app.Sequelize.Op;
         let { User } = this.app.model
         let page = this.ctx.query.page ? this.ctx.query.page : 1
@@ -63,28 +64,40 @@ class UserController extends Controller {
         //     username:'martinyu1',
         //     password:'123123'
         // })
-        let res = await this.app.model.User.bulkCreate([
-            {
-                username: 'martinyu22',
-                password: '123123',
-                sex: '男',
+        // let res = await this.app.model.User.bulkCreate([
+        //     {
+        //         username: 'martinyu22',
+        //         password: '123123',
+        //         sex: '男',
+        //     },
+        //     {
+        //         username: 'martinyu23',
+        //         password: '123123',
+        //         sex: '男',
+        //     }
+        // ])
+
+        let params = this.ctx.request.body
+        //参数验证
+        this.ctx.validate({
+            username: {
+                type: 'string',
+                required: true,
+                desc: '用户名'
             },
-            {
-                username: 'martinyu23',
-                password: '123123',
-                sex: '男',
+            password: {
+                type: 'string',
+                required: true,
+                desc: '密码'
             },
-            {
-                username: 'martinyu24',
-                password: '123123',
-                sex: '男',
-            },
-            {
-                username: 'martinyu25',
-                password: '123123',
-                sex: '男',
-            },
-        ])
+            sex: {
+                type: 'string',
+                required:false,
+                defValue:'保密',
+                desc: '性别'
+            }
+        })
+        let res = await this.app.model.User.create(params)
         this.ctx.body = {
             msg: 'ok',
             res,
@@ -125,7 +138,7 @@ class UserController extends Controller {
         this.ctx.body = {
             msg: 'ok',
             data: res
-        } 
+        }
     }
 }
 

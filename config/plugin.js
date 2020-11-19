@@ -1,7 +1,7 @@
 /*
  * @Author: Martin
  * @Date: 2020-11-17 19:25:12
- * @LastEditTime: 2020-11-17 20:45:26
+ * @LastEditTime: 2020-11-19 15:58:55
  * @FilePath: \egg-app\config\plugin.js
  */
 'use strict';
@@ -19,5 +19,9 @@ module.exports = {
   sequelize: {
     enable: true,
     package: 'egg-sequelize'
+  },
+  valparams: {
+    enable : true,
+    package: 'egg-valparams'
   }
 };

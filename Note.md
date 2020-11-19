@@ -274,7 +274,7 @@ module.exports = app => {
 
   * **findAll()** 。如果不传则查询所有
 
-  * ```
+  * ```js
             let res = await this.app.model.User.findAll({
                 where: {
                     id: 2,
@@ -420,4 +420,133 @@ module.exports = app => {
   })
   ```
 
+
+### 错误处理
+
+* 全局错误处理
+
+* 新建一个middleware文件夹
+
+  ```js
+  //middleware/error_handler.js
+  module.exports = (option, app) => {
+      return async function errorHandler(ctx, next) {
+          try {
+              await next()
+          } catch (error) {
+              //所有的异常都在app上触发一个error事件，框架会记录一条错误日志
+              ctx.app.emit('error', error, ctx)
+              //数据库报错
+              if(error.name === "SequelizeUniqueConstraintError"){
+                  return ctx.body = {
+                      msg: 'fail',
+                      data:error.errors[0].message
+                  }
+              }
+              //参数错误
+              ctx.status = error.status;
+              if (ctx.status === 422) {
+                  return ctx.body = {
+                      msg: 'fail',
+                      data: error.errors 
+                  }
+              }
+              ctx.body = {
+                  msg: 'fail',
+                  data: error.message
+              }
+          }
+      }
+  }
+  ```
+
+* ```js
+  // config/config.default.js下注册
+  // add your middleware config here
+  config.middleware = ['errorHandler'];
+  ```
+
+### 中间件配置
+
+* ```js
+  // config/config.default.js下注册
+  // add your middleware config here
+  config.middleware = ['errorHandler'];
   
+  config.errorHandler = {
+      //通用配置
+      enable: true,
+      match: '/news',//设置只有符合某些规则的请求才会经过这个中间件
+      ignore: '/shop',//设置符合某些规则的请求不会经过这个中间件
+      //match: ["/user/list"] //如果有多个可以配置为数组
+  }
+  
+  ```
+
+### 参数验证
+
+* 写入数据库之前进行参数验证
+
+* [api文档](https://github.com/D780/valparams/blob/master/doc/api.md)
+
+* ```
+  npm i egg-valparams --save
+  ```
+
+  ```js
+  // config/plugin.js
+  valparams: {
+      enable : true,
+      package: 'egg-valparams'
+  }
+  
+  // config/config.default.js
+  config.valparams = {
+      locale: 'zh-cn',
+      throwError: true //是否主动抛出异常
+  };
+  ```
+
+  ```js
+  //使用
+  class XXXController extends app.Controller {
+    // ...
+    async XXX() {
+      const {ctx} = this;
+      ctx.validate({
+        system  : {                                                                                        : 'string', required: false, defValue: 'account', desc: '系统名称'},
+        token   : {type: 'string', required: true, desc: 'token 验证'},
+        redirect: {type: 'string', required: false, desc: '登录跳转'}
+      });
+      // if (config.throwError === false)
+      if(ctx.paramErrors) {
+        // get error infos from `ctx.paramErrors`;
+      }
+      let params = ctx.params;
+      let {query, body} = ctx.request;
+      // ctx.params        = validater.ret.params;
+      // ctx.request.query = validater.ret.query;
+      // ctx.request.body  = validater.ret.body;
+      // ...
+      ctx.body = query;
+    1
+    // ...
+  }
+  ```
+
+  * 抛出错误的状态码为 422 ，需要做全局错误处理  
+
+    ```js
+    ctx.status = error.status;
+        if (ctx.status === 422) {
+        return ctx.body = {
+        msg: 'fail',
+        data: error.errors 
+        }
+    }
+    ```
+
+    
+
+
+
