@@ -20,7 +20,7 @@ async index(){
 
 * npm i egg-cors --save
 
-* ```jade
+* ```js
   //config\config.default.js
     //关闭csrf开启跨域
     config.security = {
