@@ -1,3 +1,18 @@
+QuickStart
+see egg docs for more detail.
+
+Development
+$ npm i
+$ npm run dev
+$ open http://localhost:7001/
+Deploy
+$ npm start
+$ npm stop
+npm scripts
+Use npm run lint to check code style.
+Use npm test to run unit test.
+Use npm run autod to auto detect dependencies upgrade, see autod for more detail.
+
 # Egg学习笔记
 
 ### 创建控制器
